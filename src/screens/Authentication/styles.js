@@ -18,7 +18,7 @@ export const Content = styled.View`
 `;
 
 export const Logo = styled.Image`
-  width: 290
+  width: 290;
 `;
  
 export const TokenInput = styled.TextInput`
@@ -54,6 +54,6 @@ export const ErrorText = styled(Text)`
 `;
 
 export const BottomLabel = styled(Text)`
-  color: white
+  color: white;
   margin-bottom: 12;
 `;

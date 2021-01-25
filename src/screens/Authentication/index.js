@@ -80,7 +80,7 @@ const Authentication = ({ navigation, theme }) => {
         </SendButton>
       </Content>
       <BottomLabel onPress={() => {navigation.navigate('NewEvent')}}>
-        Novo evento
+        Histórico de eventos
       </BottomLabel>
     </LinearGradient>
   );

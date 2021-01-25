@@ -15,10 +15,10 @@ export const ModalHeader = styled.View`
 `;
 
 export const ModalTitle = styled(Title)`
-    color: ${props => props.color}
+    color: ${props => props.color};
     font-size: 27;
     margin-left: 15;
-    margin-top:15
+    margin-top: 15;
     margin-right:10;
 `;
 
