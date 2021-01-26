@@ -1,9 +1,6 @@
 import api, { accessKey } from './api';
 import AsyncStorage from '@react-native-community/async-storage';
-
-function checkContains(arr, value, param="token") {
-  return arr.some(item => item[param] === value)
-}
+import { checkContains } from '../utils/checkArray'
 
 export const tryAuth = async token => {
   const response = await api.get(
@@ -12,26 +9,17 @@ export const tryAuth = async token => {
 
   if (response.data.sucess == 200) {
     const event = { name: response.data.nome_evento, token }
-    try {
-      const eventHistory = await AsyncStorage.getItem('@eventHistory')
-      if (eventHistory != null) {
-        let events = JSON.parse(eventHistory)
-        checkContains(events, token, "token") ? events : events.push(event)
-        try {
-          await AsyncStorage.setItem('@eventHistory', JSON.stringify(events))
-        } catch (err) {
-          console.error(err)
-        }
-      } else {
-        try {
-          await AsyncStorage.setItem('@eventHistory', JSON.stringify([event]))
-        } catch (err) {
-          console.error(err)
-        }
-      }
-    } catch (err) {
-      console.error(err)
+    let eventHistory = await AsyncStorage.getItem('@eventHistory')
+    eventHistory = JSON.parse(eventHistory)
+
+    if (eventHistory != null && !checkContains(eventHistory, token, "token")) {
+      eventHistory.push(event)
+      await AsyncStorage.setItem('@eventHistory', JSON.stringify(eventHistory))
     }
+    else if (eventHistory == null) {
+      await AsyncStorage.setItem('@eventHistory', JSON.stringify([event]))
+    }
+    
     await AsyncStorage.setItem('@authData', JSON.stringify(response.data))
     return {
       success: true,

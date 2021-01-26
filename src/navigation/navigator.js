@@ -8,10 +8,11 @@ import { Creators as PhotoActions } from '../store/ducks/photo'
 import Modal from '../components/Modal'
 
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator, HeaderBackButton } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator, } from 'react-navigation-material-bottom-tabs';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Authentication from '../screens/Authentication';
+import EventHistory from '../screens/EventHistory'
 
 import Gallery from '../screens/Gallery';
 import Camera from '../screens/Camera';
@@ -27,7 +28,7 @@ const bottomNavigator = createBottomTabNavigator(
     Gallery,
   },
   {
-    tabBarOptions: { 
+    tabBarOptions: {
       style: {
         borderTopColor: theme.colors.background,
       },
@@ -39,7 +40,7 @@ const bottomNavigator = createBottomTabNavigator(
       }
     },
   }
-  
+
 );
 
 const stackNavigatior = createStackNavigator(
@@ -52,11 +53,33 @@ const stackNavigatior = createStackNavigator(
         headerMode: 'float',
       },
     },
+    EventHistory: {
+      screen: EventHistory,
+      navigationOptions: ({ navigation }) => ({
+        title: 'Histórico de eventos',
+        headerStyle: {
+          backgroundColor: '#901CA6',
+          textAlign: 'center'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          color: '#fff',
+          textAlign: 'center',
+          flex: 1,
+        },
+        headerTitleContainerStyle: {
+          left: 0
+        },
+        headerLeft: () => (
+          <HeaderBackButton onPress={() => navigation.goBack()} />
+        ),
+      })
+    }
   },
   {
     initialRouteName: 'Authentication',
   },
-
+  
 );
 
 const AppContainer = createAppContainer(stackNavigatior);

@@ -20,14 +20,23 @@ import ImageLogo from '../../assets/images/white-logo.png';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Creators as AuthActions } from '../../store/ducks/auth';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Authentication = ({ navigation, theme }) => {
   const [token, setToken] = useState('');
-
+  const [eventHistory, setEventHistory] = useState('')
   const authenticated = useSelector(store => store.auth.authenticated);
   const loading = useSelector(store => store.auth.loading);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function getEvents() {
+      const events = await AsyncStorage.getItem('@eventHistory')
+      events != null ? setEventHistory(JSON.parse(events)) : setEventHistory(events)
+    }
+    getEvents()
+  }, [])
 
   useEffect(() => {
     function openGallery() {
@@ -79,9 +88,13 @@ const Authentication = ({ navigation, theme }) => {
           }
         </SendButton>
       </Content>
-      <BottomLabel onPress={() => {navigation.navigate('NewEvent')}}>
+      {eventHistory != null && (
+      <BottomLabel onPress={() => {navigation.navigate('EventHistory', {
+        data: eventHistory
+      })}}>
         Histórico de eventos
       </BottomLabel>
+      )}
     </LinearGradient>
   );
 };
