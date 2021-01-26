@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import AsyncStorage from '@react-native-community/async-storage';
 import { StatusBar, FlatList, TouchableOpacity, StyleSheet, View, Text, Dimensions } from 'react-native';
 import { withTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-navigation';
+import { useSelector, useDispatch } from 'react-redux'
+import { Creators as AuthActions } from '../../store/ducks/auth';
+
 
 const Item = ({ item, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.item}>
@@ -13,7 +15,24 @@ const Item = ({ item, onPress }) => (
 
 const EventHistory = ({ navigation, theme }) => {
   const data = navigation.getParam('data')
+  const authenticated = useSelector(store => store.auth.authenticated);
+  const loading = useSelector(store => store.auth.loading);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    function openGallery() {
+      if (authenticated) {
+        navigation.navigate('Gallery');
+      }
+    }
+
+    return openGallery();
+  }, [authenticated, navigation]);
+
+  const tryToAuthenticate = async (token) => {
+    dispatch(AuthActions.authenticate(token));
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <LinearGradient
@@ -23,7 +42,7 @@ const EventHistory = ({ navigation, theme }) => {
         <View style={styles.view}>
           <FlatList
             data={data}
-            renderItem={({ item }) => <Item item={item} onPress={() => console.log('Teste eve')} />}
+            renderItem={({ item }) => <Item item={item} onPress={() => tryToAuthenticate(item.token)} />}
             keyExtractor={(item) => item.token}
           />
         </View>

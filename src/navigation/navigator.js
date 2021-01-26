@@ -61,7 +61,6 @@ const stackNavigatior = createStackNavigator(
           backgroundColor: '#901CA6',
           textAlign: 'center'
         },
-        headerTintColor: '#fff',
         headerTitleStyle: {
           color: '#fff',
           textAlign: 'center',
@@ -71,7 +70,7 @@ const stackNavigatior = createStackNavigator(
           left: 0
         },
         headerLeft: () => (
-          <HeaderBackButton onPress={() => navigation.goBack()} />
+          <HeaderBackButton tintColor="#FFF" onPress={() => navigation.goBack()} />
         ),
       })
     }
